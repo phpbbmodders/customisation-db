@@ -50,9 +50,9 @@ class multibranch_demo_support extends base
 			$branch = (empty($row['phpbb_version_branch'])) ? 30 : (int) $row['phpbb_version_branch'];
 			$demo = json_encode(array($branch => $row['contrib_demo']));
 
-			$sql = 'UPDATE ' . $prefix . 'contribs
-				SET contrib_demo = "' . $this->db->sql_escape($demo) . '"
-				WHERE contrib_id = ' . (int) $row['contrib_id'];
+			$sql = 'UPDATE ' . $prefix . "contribs
+				SET contrib_demo = '" . $this->db->sql_escape($demo) . "'
+				WHERE contrib_id = " . (int) $row['contrib_id'];
 			$this->db->sql_query($sql);
 
 			$i++;

@@ -32,7 +32,7 @@ class release_1_1_1 extends base
 		return array(
 			'change_columns' => array(
 				$table_prefix . 'contribs' => array(
-					'contrib_demo'			=> array('VCHAR_UNI:8000', ''),
+					'contrib_demo'			=> array('VCHAR_UNI:4000', ''), // SQL Server's nvarchar holds at most 4000
 				),
 			),
 		);
