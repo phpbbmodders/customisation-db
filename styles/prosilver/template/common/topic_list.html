@@ -2,7 +2,7 @@
 <div class="action-bar">
 	{% if U_POST_TOPIC %}
 		<a href="{{ U_POST_TOPIC }}" title="{{ lang('POST_TOPIC') }}" class="button">
-			<span>{{ lang('BUTTON_NEW_TOPIC') }}</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+			<span>{{ lang('BUTTON_NEW_TOPIC') }}</span> <i class="icon o-icon o-icon-font fas fa-pencil fa-fw" aria-hidden="true"></i>
 		</a>
 	{% endif %}
 
@@ -12,11 +12,11 @@
 			<fieldset>
 				<input class="inputbox search tiny" type="search" name="keywords" id="search_keywords" size="20" placeholder="{{ lang('SEARCH_FORUM') }}" />
 				<button class="button button-search" type="submit" title="{{ lang('SEARCH') }}">
-					<i class="icon fa-search fa-fw" aria-hidden="true"></i>
+					<i class="icon o-icon o-icon-font fas fa-search fa-fw" aria-hidden="true"></i>
 					<span class="sr-only">{{ lang('SEARCH') }}</span>
 				</button>
 				<a href="{{ U_SEARCH }}" class="button button-search-end" title="{{ lang('SEARCH_ADV') }}">
-					<i class="icon fa-cog fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH_ADV') }}</span>
+					<i class="icon o-icon o-icon-font fas fa-cog fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH_ADV') }}</span>
 				</a>
 				{{ SEARCH_HIDDEN_FIELDS }}
 			</fieldset>
@@ -65,13 +65,13 @@
 						{% endif %}
 						{% if topics.S_UNREAD_TOPIC and not S_IS_BOT %}
 							<a href="{{ topics.U_NEWEST_POST }}">
-								<i class="icon fa-file fa-fw icon-red icon-md" aria-hidden="true"></i>
+								<i class="icon o-icon o-icon-font fas fa-file fa-fw icon-red icon-md" aria-hidden="true"></i>
 								<span class="sr-only">{{ NEW_POST }}</span>
 							</a>
 						{% endif %}
 						<a href="{{ topics.U_VIEW_TOPIC }}" class="topictitle">{{ topics.TOPIC_SUBJECT }}</a>{% if topics.TOPIC_CONTRIB_NAME %}<br /><em>{% if topics.CONTRIB_TYPE %}{{ topics.CONTRIB_TYPE }}{% endif %} {% if topics.U_VIEW_TOPIC_CONTRIB %} &raquo; <a href="{{ topics.U_VIEW_TOPIC_CONTRIB }}">{{ topics.TOPIC_CONTRIB_NAME }}</a>{% else %} &raquo; {{ topics.TOPIC_CONTRIB_NAME }}{% endif %} {% if topics.U_VIEW_TOPIC_CONTRIB_SUPPORT %} &raquo; <a href="{{ topics.U_VIEW_TOPIC_CONTRIB_SUPPORT }}">{{ lang('CONTRIB_SUPPORT') }}</a>{% else %} &raquo; {{ topics.TOPIC_CONTRIB_NAME }}{% endif %}</em>{% endif %}
-						{% if not topics.TOPIC_APPROVED or not topics.POSTS_APPROVED %}<i class="icon fa-question fa-fw icon-blue" aria-hidden="true"></i><span class="sr-only">{{ lang('POSTS_UNAPPROVED') }}</span> {% endif %}
-						{% if topics.TOPIC_REPORTED %}<i class="icon fa-exclamation fa-fw icon-red" aria-hidden="true"></i><span class="sr-only">{{ lang('TOPIC_REPORTED') }}</span>{% endif %}<br />
+						{% if not topics.TOPIC_APPROVED or not topics.POSTS_APPROVED %}<i class="icon o-icon o-icon-font fas fa-question fa-fw icon-blue" aria-hidden="true"></i><span class="sr-only">{{ lang('POSTS_UNAPPROVED') }}</span> {% endif %}
+						{% if topics.TOPIC_REPORTED %}<i class="icon o-icon o-icon-font fas fa-exclamation fa-fw icon-red" aria-hidden="true"></i><span class="sr-only">{{ lang('TOPIC_REPORTED') }}</span>{% endif %}<br />
 						{% if topics.pagination|length %}
 						<div class="pagination">
 							<ul>
@@ -93,7 +93,7 @@
 				<dd class="lastpost"><span><dfn>{{ lang('LAST_POST') }} </dfn>{{ lang('POST_BY_AUTHOR') }} {{ topics.TOPIC_LAST_POST_USER_FULL }}
 					{% if not S_IS_BOT %}
 						<a href="{{ topics.U_VIEW_LAST_POST }}">
-							<i class="icon fa-external-link-square fa-fw icon-lightgray icon-md" aria-hidden="true"></i>
+							<i class="icon o-icon o-icon-font fas fa-external-link-square fa-fw icon-lightgray icon-md" aria-hidden="true"></i>
 							<span class="sr-only">{{ VIEW_LATEST_POST }}</span>
 						</a>
 					{% endif %}
@@ -122,7 +122,7 @@
 <div class="action-bar">
 	{% if U_POST_TOPIC %}
 		<a href="{{ U_POST_TOPIC }}" title="{{ lang('POST_TOPIC') }}" class="button">
-			<span>{{ lang('BUTTON_NEW_TOPIC') }}</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+			<span>{{ lang('BUTTON_NEW_TOPIC') }}</span> <i class="icon o-icon o-icon-font fas fa-pencil fa-fw" aria-hidden="true"></i>
 		</a>
 	{% endif %}
 

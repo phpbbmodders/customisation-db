@@ -3,9 +3,9 @@
 	{% if U_POST_REPLY %}
 	<a href="{{ U_POST_REPLY }}" title="{% if S_IS_LOCKED %}{{ lang('TOPIC_LOCKED') }}{% else %}{{ lang('POST_REPLY') }}{% endif %}" class="button">
 		{% if S_IS_LOCKED %}
-		<span>{{ lang('BUTTON_TOPIC_LOCKED') }}</span> <i class="icon fa-lock fa-fw" aria-hidden="true"></i>
+		<span>{{ lang('BUTTON_TOPIC_LOCKED') }}</span> <i class="icon o-icon o-icon-font fas fa-lock fa-fw" aria-hidden="true"></i>
 		{% else %}
-		<span>{{ lang('BUTTON_POST_REPLY') }}</span> <i class="icon fa-reply fa-fw" aria-hidden="true"></i>
+		<span>{{ lang('BUTTON_POST_REPLY') }}</span> <i class="icon o-icon o-icon-font fas fa-reply fa-fw" aria-hidden="true"></i>
 		{% endif %}
 	</a>
 	{% endif %}
@@ -33,7 +33,7 @@
 				{% if posts.U_EDIT %}
 				<li>
 					<a href="{{ posts.U_EDIT }}" title="{{ lang('EDIT_POST') }}" class="button button-icon-only" data-ajax="titania.quick_edit" data-filter="titania.quickEditFilter">
-						<i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-pencil fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('EDIT_POST') }}</span>
 					</a>
 				</li>
@@ -41,7 +41,7 @@
 				{% if posts.U_DELETE %}
 				<li>
 					<a href="{{ posts.U_DELETE }}" title="{{ lang('DELETE_POST') }}" class="button button-icon-only">
-						<i class="icon fa-times fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-times fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('DELETE_POST') }}</span>
 					</a>
 				</li>
@@ -49,7 +49,7 @@
 				{% if posts.U_REPORT %}
 				<li>
 					<a href="{{ posts.U_REPORT }}" title="{{ lang('REPORT_POST') }}" class="button button-icon-only">
-						<i class="icon fa-exclamation fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-exclamation fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('REPORT_POST') }}</span>
 					</a>
 				</li>
@@ -57,7 +57,7 @@
 				{% if posts.U_WARN %}
 				<li>
 					<a href="{{ posts.U_WARN }}" title="{{ lang('WARN_USER') }}" class="button button-icon-only">
-						<i class="icon fa-exclamation-triangle fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-exclamation-triangle fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('WARN_USER') }}</span>
 					</a>
 				</li>
@@ -65,7 +65,7 @@
 				{% if posts.U_QUOTE %}
 				<li>
 					<a href="{{ posts.U_QUOTE }}" title="{{ lang('REPLY_WITH_QUOTE') }}" class="button button-icon-only">
-						<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-quote-left fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('REPLY_WITH_QUOTE') }}</span>
 					</a>
 				</li>
@@ -79,10 +79,10 @@
 				{% elseif posts.S_ACCESS_AUTHORS%}<img src="{{ T_TITANIA_THEME_PATH }}/{{ S_USER_LANG }}/icon_access_author.png" alt="{{ lang('ACCESS_LIMIT_AUTHORS') }}" title="{{ lang('ACCESS_LIMIT_AUTHORS') }}" />{% endif %}</h3>
 			<p class="author">
 				{% if S_IS_BOT %}
-				<span><i class="icon fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span></span>
+				<span><i class="icon o-icon o-icon-font fas fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span></span>
 				{% else %}
 				<a class="unread" href="{{ posts.U_MINI_POST }}" title="{{ posts.MINI_POST }}">
-					<i class="icon fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span>
+					<i class="icon o-icon o-icon-font fas fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span>
 				</a>
 				{% endif %}
 				{{ lang('POST_BY_AUTHOR') }} <strong>{{ posts.USER_FULL }}</strong> &raquo; {{ posts.POST_TIME }}
@@ -90,12 +90,12 @@
 
 			{% if not posts.S_POST_APPROVED %}
 			<p class="post-notice unapproved">
-				<a href="{{ posts.U_INFO }}"><i class="icon fa-question icon-red fa-fw" aria-hidden="true"></i><strong>{{ lang('POST_UNAPPROVED') }}</strong></a>
+				<a href="{{ posts.U_INFO }}"><i class="icon o-icon o-icon-font fas fa-question icon-red fa-fw" aria-hidden="true"></i><strong>{{ lang('POST_UNAPPROVED') }}</strong></a>
 			</p>
 			{% endif %}
 			{% if posts.S_POST_REPORTED %}
 			<p class="post-notice reported">
-				<a href="{{ posts.U_INFO }}"><i class="icon fa-exclamation fa-fw icon-red" aria-hidden="true"></i><strong>{{ lang('POST_REPORTED') }}</strong></a>
+				<a href="{{ posts.U_INFO }}"><i class="icon o-icon o-icon-font fas fa-exclamation fa-fw icon-red" aria-hidden="true"></i><strong>{{ lang('POST_REPORTED') }}</strong></a>
 			</p>
 			{% endif %}
 
@@ -161,7 +161,7 @@
 				<strong>{{ lang('CONTACT') ~ lang('COLON') }}</strong>
 				<div class="dropdown-container dropdown-left">
 					<a href="#" class="dropdown-trigger">
-						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span>
+						<i class="icon o-icon o-icon-font far fa-comment-dots fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span>
 					</a>
 					<div class="dropdown hidden">
 						<div class="pointer"><div class="pointer-inner"></div></div>
@@ -190,7 +190,7 @@
 
 		<div class="back2top">
 			<a href="#wrap" class="top" title="{{ lang('BACK_TO_TOP') }}">
-				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<i class="icon o-icon o-icon-font fas fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
 				<span class="sr-only">{{ lang('BACK_TO_TOP') }}</span>
 			</a>
 		</div>
@@ -212,9 +212,9 @@
 	{% if U_POST_REPLY %}
 	<a href="{{ U_POST_REPLY }}" title="{% if S_IS_LOCKED %}{{ lang('TOPIC_LOCKED') }}{% else %}{{ lang('POST_REPLY') }}{% endif %}" class="button">
 		{% if S_IS_LOCKED %}
-		<span>{{ lang('BUTTON_TOPIC_LOCKED') }}</span> <i class="icon fa-lock fa-fw" aria-hidden="true"></i>
+		<span>{{ lang('BUTTON_TOPIC_LOCKED') }}</span> <i class="icon o-icon o-icon-font fas fa-lock fa-fw" aria-hidden="true"></i>
 		{% else %}
-		<span>{{ lang('BUTTON_POST_REPLY') }}</span> <i class="icon fa-reply fa-fw" aria-hidden="true"></i>
+		<span>{{ lang('BUTTON_POST_REPLY') }}</span> <i class="icon o-icon o-icon-font fas fa-reply fa-fw" aria-hidden="true"></i>
 		{% endif %}
 	</a>
 	{% endif %}
@@ -222,8 +222,8 @@
 	{% if loops.quickmod|length %}
 	<div class="dropdown-container dropdown-container-{{ S_CONTENT_FLOW_BEGIN }} dropdown-up dropdown-{{ S_CONTENT_FLOW_END }} dropdown-button-control" id="quickmod">
 			<span title="{{ lang('QUICK_MOD') }}" class="dropdown-trigger button button-secondary dropdown-select">
-				<i class="icon fa-gavel fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('QUICK_MOD') }}</span>
-				<span class="caret"><i class="icon fa-sort-down fa-fw" aria-hidden="true"></i></span>
+				<i class="icon o-icon o-icon-font fas fa-gavel fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('QUICK_MOD') }}</span>
+				<span class="caret"><i class="icon o-icon o-icon-font fas fa-sort-down fa-fw" aria-hidden="true"></i></span>
 			</span>
 		<div class="dropdown hidden">
 			<div class="pointer"><div class="pointer-inner"></div></div>

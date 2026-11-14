@@ -21,7 +21,7 @@
 			<ul class="post-buttons">
 				<li>
 					<a href="#postingbox" onclick="addquote({{ posts.POST_ID }}, '{{ posts.USERNAME }}');" title="{{ lang('QUOTE') }} {{ posts.USERNAME }}" class="button button-icon-only">
-						<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-quote-left fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('QUOTE') }} {{ posts.USERNAME }}</span>
 					</a>
 				</li>
@@ -31,10 +31,10 @@
 			<h3><a href="{{ posts.U_VIEW }}">{{ posts.POST_SUBJECT }}</a></h3>
 			<p class="author">
 				{% if S_IS_BOT %}
-				<span><i class="icon fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span></span>
+				<span><i class="icon o-icon o-icon-font fas fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span></span>
 				{% else %}
 				<a class="unread" href="{{ posts.U_MINI_POST }}" title="{{ posts.MINI_POST }}">
-					<i class="icon fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span>
+					<i class="icon o-icon o-icon-font fas fa-file fa-fw {% if posts.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ posts.MINI_POST }}</span>
 				</a>
 				{% endif %}
 				{{ lang('POST_BY_AUTHOR') }} <strong>{{ posts.USER_FULL }}</strong> &raquo; {{ posts.POST_TIME }}

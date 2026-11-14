@@ -43,7 +43,7 @@
 	<div class="action-bar contrib-filter">
 		{% if U_CREATE_CONTRIBUTION %}
 			<a href="{{ U_CREATE_CONTRIBUTION }}" title="{{ lang('NEW_CONTRIBUTION') }}" class="button">
-				<span>{{ lang('NEW_CONTRIBUTION') }}</span> <i class="icon fa-plus-circle fa-fw" aria-hidden="true"></i>
+				<span>{{ lang('NEW_CONTRIBUTION') }}</span> <i class="icon o-icon o-icon-font fas fa-plus-circle fa-fw" aria-hidden="true"></i>
 			</a>
 		{% endif %}
 
@@ -53,11 +53,11 @@
 				<fieldset>
 					<input class="inputbox search tiny" type="text" name="keywords" id="search_keywords" size="20" placeholder="{{ lang('SEARCH_MINI') }}" />
 					<button class="button button-search" type="submit" title="{{ lang('SEARCH') }}">
-						<i class="icon fa-search fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-search fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('SEARCH') }}</span>
 					</button>
 					<a href="{{ U_SEARCH }}" class="button button-search-end" title="{{ lang('SEARCH_ADV') }}">
-						<i class="icon fa-cog fa-fw" aria-hidden="true"></i>
+						<i class="icon o-icon o-icon-font fas fa-cog fa-fw" aria-hidden="true"></i>
 						<span class="sr-only">{{ lang('SEARCH_ADV') }}</span>
 					</a>
 					<input type="hidden" value="{{ CATEGORY_ID }}" name="c[]" />
