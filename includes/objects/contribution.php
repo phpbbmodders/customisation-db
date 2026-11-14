@@ -1005,6 +1005,12 @@ class titania_contribution extends \phpbb\titania\entity\message_base
 				}
 			break;
 
+			case 'support' :
+			case 'faq' :
+			case 'manage' :
+				$controller .= '.' . $page;
+				break;
+
 			case 'posting' :
 				$controller .= '.support.post_topic';
 				unset($parameters['page']);
