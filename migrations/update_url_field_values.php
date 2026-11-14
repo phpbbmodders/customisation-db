@@ -48,7 +48,7 @@ class update_url_field_values extends base
 
 		$sql = "SELECT {$field}_id, {$field}_url, {$field}_type
 			FROM $table";
-		$result = $this->db->sql_query_limit($sql, $limit, $start);
+		$result = $this->db->sql_query_limit($sql, $limit, $start ?? 0);
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
