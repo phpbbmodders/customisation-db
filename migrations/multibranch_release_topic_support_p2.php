@@ -37,7 +37,7 @@ class multibranch_release_topic_support_p2 extends base
 		{
 			$sql = "UPDATE {$table_prefix}contribs
 				SET contrib_release_topic_id = ''
-					WHERE contrib_release_topic_id = 0";
+					WHERE contrib_release_topic_id = '0'";
 			$this->db->sql_query($sql);
 		}
 

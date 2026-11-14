@@ -682,7 +682,7 @@ class release_1_1_0 extends base
 			)
 		);
 
-		$this->db->sql_multi_insert($table_prefix . 'tag_types', $tag_types);
+		$this->insert_with_ids($table_prefix . 'tag_types', 'tag_type_id', $tag_types);
 
 		$tags = array(
 			array(
@@ -737,7 +737,7 @@ class release_1_1_0 extends base
 			),
 		);
 
-		$this->db->sql_multi_insert($table_prefix . 'tag_fields', $tags);
+		$this->insert_with_ids($table_prefix . 'tag_fields', 'tag_id', $tags);
 	}
 
 	public function add_categories()
@@ -907,7 +907,40 @@ class release_1_1_0 extends base
 			),
 		);
 
-		$this->db->sql_multi_insert($table_prefix . 'categories', $categories);
+		$this->insert_with_ids($table_prefix . 'categories', 'category_id', $categories);
+	}
+
+	/**
+	 * Insert rows that give their own auto-increment ID.
+	 *
+	 * SQL Server refuses explicit identity values unless IDENTITY_INSERT is on,
+	 * and PostgreSQL's sequence does not move past them, so the next row added
+	 * without an ID would collide with one of these.
+	 *
+	 * @param string $table  Table name, with prefix
+	 * @param string $column Auto-increment column
+	 * @param array  $rows   Rows to insert
+	 */
+	protected function insert_with_ids($table, $column, array $rows)
+	{
+		$layer = $this->db->get_sql_layer();
+		$mssql = in_array($layer, array('mssql_odbc', 'mssqlnative'), true);
+
+		if ($mssql)
+		{
+			$this->db->sql_query('SET IDENTITY_INSERT ' . $table . ' ON');
+		}
+
+		$this->db->sql_multi_insert($table, $rows);
+
+		if ($mssql)
+		{
+			$this->db->sql_query('SET IDENTITY_INSERT ' . $table . ' OFF');
+		}
+		else if ($layer === 'postgres')
+		{
+			$this->db->sql_query("SELECT SETVAL('" . $table . "_seq', (SELECT MAX(" . $column . ') FROM ' . $table . '))');
+		}
 	}
 }
 
