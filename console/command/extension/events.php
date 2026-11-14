@@ -134,7 +134,7 @@ class events extends \phpbb\console\command\command
 	 * @return int|null|void
 	 * @throws \Exception
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		// Store the IO object for use later
 		$this->input = $input;
@@ -154,6 +154,8 @@ class events extends \phpbb\console\command\command
 
 		$this->output->writeln($this->language->lang('CLI_EXTENSION_EVENTS_EXECUTION_TIME',
 			$total_time['h'], $total_time['m'], $total_time['s'], $average_time['h'], $average_time['m'], $average_time['s']));
+
+		return 0;
 	}
 
 	/**

@@ -111,7 +111,7 @@ class language extends \phpbb\console\command\command
 	 * @return int|null|void
 	 * @throws \Exception
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		// Store the IO object for use later
 		$this->input = $input;
@@ -135,6 +135,8 @@ class language extends \phpbb\console\command\command
 
 		// Create the package
 		$this->package($zip_path);
+
+		return 0;
 	}
 
 	/**

@@ -71,9 +71,9 @@ class rebuild_repo extends \phpbb\console\command\command
 	 * @param InputInterface  $input  An InputInterface instance
 	 * @param OutputInterface $output An OutputInterface instance
 	 *
-	 * @return null
+	 * @return int 0 on success
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$progress = new ProgressBar($output, $this->tool->get_total());
 		$progress->start();
@@ -90,5 +90,7 @@ class rebuild_repo extends \phpbb\console\command\command
 		$progress->finish();
 		$output->writeln('');
 		$output->writeln('<info>' . $this->user->lang($result['message']) . '</info>');
+
+		return 0;
 	}
 }

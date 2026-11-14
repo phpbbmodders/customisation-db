@@ -161,7 +161,7 @@ class repack extends \phpbb\console\command\command
 	 *
 	 * @return void
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$ext_name = $input->getArgument('vendor/extname');
 		$message = $input->getOption('message');
@@ -209,6 +209,8 @@ class repack extends \phpbb\console\command\command
 
 		$output->writeln('');
 		$output->writeln('<info>' . $this->language->lang('CLI_EXTENSION_REPACK_FINISHED', $num_repacks) . '</info>');
+
+		return 0;
 	}
 
 	/**
