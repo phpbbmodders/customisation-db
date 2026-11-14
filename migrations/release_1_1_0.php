@@ -369,7 +369,9 @@ class release_1_1_0 extends base
 					'PRIMARY_KEY'	=> 'row_id',
 					'KEYS'			=> array(
 						'r_id'			=> array('INDEX', 'revision_id'),
-						'c_id'			=> array('INDEX', 'contrib_id'),
+						// phpBB 4.0 prefixes index names with a short table name, which is the
+						// same for revisions and revisions_phpbb, so c_id would collide.
+						'rp_c_id'		=> array('INDEX', 'contrib_id'),
 						'pv_bra'		=> array('INDEX', 'phpbb_version_branch'),
 						'pv_rev'		=> array('INDEX', 'phpbb_version_revision'),
 						'r_val'			=> array('INDEX', 'revision_validated'),
