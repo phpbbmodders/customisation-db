@@ -26,7 +26,6 @@ use phpbb\titania\contribution\type\collection as type_collection;
 use phpbb\titania\access;
 use s9e\TextFormatter\Configurator\Items\TemplateDocument;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
 * Event listener
@@ -194,7 +193,7 @@ class main_listener implements EventSubscriberInterface
 
 	public function startup($event)
 	{
-		if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST ||
+		if (!$event->isMainRequest() ||
 			strpos($event->getRequest()->attributes->get('_controller'), 'phpbb.titania') !== 0)
 		{
 			return;
