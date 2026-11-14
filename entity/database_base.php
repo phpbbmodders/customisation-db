@@ -125,6 +125,8 @@ abstract class database_base extends base
 			$sql_array[$name] = $this->validate_property($this->$name, $this->object_config[$name]);
 		}
 
+		unset($sql_array[$this->sql_id_field]);
+
 		$sql = 'INSERT INTO ' . $this->sql_table . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 		$this->db->sql_query($sql);
 
