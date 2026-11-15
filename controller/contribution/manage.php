@@ -250,16 +250,6 @@ class manage extends base
 			if (empty($error))
 			{
 				$this->submit($authors, $old_settings);
-
-				/**
-				 * Lets an extension save the fields it added to the contribution's manage page,
-				 * after the contribution's own changes were saved.
-				 *
-				 * @event phpbb.titania.contribution_manage_submit_after
-				 * @var \titania_contribution contrib The contribution that was changed
-				 */
-				$vars = array('contrib');
-				extract($this->trigger_event('phpbb.titania.contribution_manage_submit_after', compact($vars)));
 			}
 		}
 
@@ -567,6 +557,18 @@ class manage extends base
 		$this->contrib->set_coauthors($authors['active_coauthors'], $authors['nonactive_coauthors'], true);
 		// Update the release topic
 		$this->contrib->update_release_topic();
+
+		$contrib = $this->contrib;
+
+		/**
+		 * Lets an extension save the fields it added to the contribution's manage page, after the
+		 * contribution's own changes were saved and before the page redirects.
+		 *
+		 * @event phpbb.titania.contribution_manage_submit_after
+		 * @var \titania_contribution contrib The contribution that was changed
+		 */
+		$vars = array('contrib');
+		extract($this->trigger_event('phpbb.titania.contribution_manage_submit_after', compact($vars)));
 
 		$new_author = $authors['new_author'];
 

@@ -18,7 +18,7 @@ Titania dispatches these events so other phpBB extensions can add to its pages w
 | --- | --- | --- | --- |
 | `phpbb.titania.contribution_manage_display` | PHP | `controller/contribution/manage.php`, `manage()`, before the page is shown | `contrib`, `error` |
 | `phpbb.titania.contribution_manage_validate` | PHP | `manage()`, when the form is submitted, after Titania's own checks | `contrib`, `error` |
-| `phpbb.titania.contribution_manage_submit_after` | PHP | `manage()`, after the contribution's changes were saved | `contrib` |
+| `phpbb.titania.contribution_manage_submit_after` | PHP | `submit()`, after the contribution's changes were saved, before the page redirects | `contrib` |
 | `titania_contribution_manage_options_after` | Template | `contributions/contribution_manage.html`, at the end of the Options section | |
 
 An extension that adds a field to the manage page adds its errors to `error` in `contribution_manage_validate`, which stops the changes being saved, and saves its field in `contribution_manage_submit_after`.
