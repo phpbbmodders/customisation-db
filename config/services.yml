@@ -233,6 +233,8 @@ services:
             - '%core.root_path%'
             - '%phpbb.titania.root_path%'
             - '%core.php_ext%'
+            - '@auth'
+            - '@phpbb.titania.config'
         tags:
             - { name: event.listener }
 

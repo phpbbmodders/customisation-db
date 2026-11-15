@@ -253,6 +253,14 @@ class config extends \phpbb\titania\entity\base
 
 			// Remove unsubmitted revisions and attachments
 			'cleanup_titania'				=> array('default' => false),
+
+			// Header Quick links to the Customisation Database, for everyone, and to its management pages, for
+			// users who can moderate it. Boards with their own menu can turn them off. An empty name uses the
+			// standard wording in the visitor's language.
+			'nav_cdb_link'					=> array('default' => true),
+			'nav_cdb_link_name'				=> array('default' => ''),
+			'nav_manage_link'				=> array('default' => true),
+			'nav_manage_link_name'			=> array('default' => ''),
 		));
 	}
 
@@ -363,6 +371,10 @@ class config extends \phpbb\titania\entity\base
 			'upload_max_filesize'			=> 'array|int',
 			'team_groups'					=> 'groups',
 			'cleanup_titania' 				=> 'bool',
+			'nav_cdb_link'					=> 'bool',
+			'nav_cdb_link_name'				=> 'string',
+			'nav_manage_link'				=> 'bool',
+			'nav_manage_link_name'			=> 'string',
 //			'style'							=> 'string',
 //			'theme'							=> 'string',
 //			'max_rating'					=> 'int',
