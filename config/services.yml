@@ -51,6 +51,16 @@ services:
             - '@phpbb.titania.attachment.plupload'
             - '@request'
 
+    # Files already on the server, such as a release an extension fetched for the author
+    phpbb.titania.attachment.files.types.local:
+        class: phpbb\files\types\local
+        shared: false
+        arguments:
+            - '@phpbb.titania.attachment.files.factory'
+            - '@language'
+            - '@php_ini'
+            - '@request'
+
     phpbb.titania.attachment.files.upload:
         class: phpbb\files\upload
         shared: false

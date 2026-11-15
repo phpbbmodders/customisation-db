@@ -197,6 +197,8 @@ services:
             - '@phpbb.titania.attachment.uploader'
             - '@phpbb.titania.attachment.uploader'
             - '@phpbb.titania.subscriptions'
+        calls:
+            - [set_dispatcher, ['@dispatcher']]
 
     phpbb.titania.controller.contrib.revision:
         class: phpbb\titania\controller\contribution\revision
@@ -218,6 +220,8 @@ services:
             - '@phpbb.titania.subscriptions'
             - '@phpbb.titania.message'
             - '%tables.titania.attachments%'
+        calls:
+            - [set_dispatcher, ['@dispatcher']]
 
     phpbb.titania.controller.contrib.revision.edit:
         class: phpbb\titania\controller\contribution\revision_edit
@@ -237,6 +241,8 @@ services:
             - '@phpbb.titania.access'
             - '@phpbb.titania.attachment.operator'
             - '@phpbb.titania.attachment.uploader'
+        calls:
+            - [set_dispatcher, ['@dispatcher']]
 
     phpbb.titania.controller.manage:
         class: phpbb\titania\controller\manage\manage

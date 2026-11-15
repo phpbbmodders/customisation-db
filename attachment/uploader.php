@@ -224,13 +224,15 @@ class uploader
 	/**
 	 * Uploads a file to server
 	 *
+	 * @param array $local_file Optional file already on the server, instead of the upload form:
+	 *                          path, name (the file name to keep) and mimetype
 	 * @return false|array filedata
 	 */
-	public function upload_file()
+	public function upload_file(array $local_file = array())
 	{
 		$this->filedata = array(
 			'error'			=> array(),
-			'post_attach'	=> $this->upload->is_valid($this->form_name),
+			'post_attach'	=> $local_file ? is_file($local_file['path']) : $this->upload->is_valid($this->form_name),
 		);
 
 		if (!$this->filedata['post_attach'])
@@ -248,10 +250,31 @@ class uploader
 		}
 
 		$this->upload->set_allowed_extensions($this->ext_config->upload_allowed_extensions[$this->object_type]);
-		$file = $this->upload->handle_upload(
-			'phpbb.titania.attachment.files.types.form',
-			$this->form_name
-		);
+		if ($local_file)
+		{
+			// A file an extension fetched for the user, such as a release from a code host: the same
+			// limit as a browser upload, checked before phpBB's upload checks run
+			if (!$this->access->is_team())
+			{
+				$this->upload->set_max_filesize($this->get_max_filesize());
+			}
+			$file = $this->upload->handle_upload(
+				'phpbb.titania.attachment.files.types.local',
+				$local_file['path'],
+				array(
+					'realname'	=> $local_file['name'],
+					'size'		=> filesize($local_file['path']),
+					'type'		=> $local_file['mimetype'],
+				)
+			);
+		}
+		else
+		{
+			$file = $this->upload->handle_upload(
+				'phpbb.titania.attachment.files.types.form',
+				$this->form_name
+			);
+		}
 
 		if ($file->init_error())
 		{
@@ -548,60 +571,89 @@ class uploader
 		{
 			// Try uploading the file.
 			$this->upload_file();
-
-			// Store for easier access
-			$this->errors = array_merge($this->errors, $this->filedata['error']);
-
-			// If we had no problems we can submit the data to the database.
-			if (empty($this->filedata['error']))
-			{
-				$order_id = ($this->set_custom_order) ? $this->operator->get_max_custom_index() + 1 : 0;
-
-				$data = array(
-					'attachment_id'			=> 0,
-					'physical_filename'		=> $this->filedata['physical_filename'],
-					'attachment_directory'	=> $this->filedata['attachment_directory'],
-					'real_filename'			=> $this->filedata['real_filename'],
-					'extension'				=> $this->filedata['extension'],
-					'mimetype'				=> $this->filedata['mimetype'],
-					'filesize'				=> $this->filedata['filesize'],
-					'filetime'				=> $this->filedata['filetime'],
-					'hash'					=> $this->filedata['md5_checksum'],
-					'attachment_order'		=> $order_id,
-					'attachment_comment'	=> $this->request->variable('filecomment', '', true),
-					'object_type'			=> $this->object_type,
-					'object_id'				=> $this->object_id,
-				);
-				$attachment = $this->operator->get_new_entity($data);
-
-				// Create thumbnail
-				$has_thumbnail = $is_preview = false;
-
-				if ($this->filedata['is_image'])
-				{
-					$has_thumbnail = $attachment->create_thumbnail(
-						$this->max_thumbnail_width,
-						(($this->max_thumbnail_width === false) ? false : 0)
-					);
-
-					// set first screenshot as preview image when it is uploaded
-					$is_preview = !$this->operator->get_count();
-				}
-
-				$attachment->__set_array(array(
-					'thumbnail'				=> $has_thumbnail,
-					'is_preview'			=> $is_preview,
-				));
-				$attachment->submit();
-
-				// Store in operator
-				$this->operator->set($attachment);
-				$this->uploaded = $attachment->get_id();
-			}
+			$this->store_uploaded_file();
 		}
 
 		// We do not want to upload it again if this function is called again.
 		$this->request->overwrite($this->form_name, null, request_interface::FILES);
+	}
+
+	/**
+	 * Attach a file that is already on the server, as if it had been uploaded with the form.
+	 * Used by extensions that fetch a file for the user; it gets the same checks as an upload.
+	 *
+	 * @param string $path     The file's location; it is moved into Titania's files folder
+	 * @param string $name     The file name to keep, such as the release asset's name
+	 * @param string $mimetype The file's type
+	 * @return bool Whether the file was attached; get_errors() says why not
+	 */
+	public function add_local_file($path, $name, $mimetype = 'application/zip')
+	{
+		$this->upload_file(array('path' => $path, 'name' => $name, 'mimetype' => $mimetype));
+
+		return $this->store_uploaded_file();
+	}
+
+	/**
+	 * Record the file upload_file() accepted as an attachment, or keep its errors.
+	 *
+	 * @return bool Whether an attachment was stored
+	 */
+	protected function store_uploaded_file()
+	{
+		// Store for easier access
+		$this->errors = array_merge($this->errors, $this->filedata['error']);
+
+		// If we had no problems we can submit the data to the database.
+		if (empty($this->filedata['error']))
+		{
+			$order_id = ($this->set_custom_order) ? $this->operator->get_max_custom_index() + 1 : 0;
+
+			$data = array(
+				'attachment_id'			=> 0,
+				'physical_filename'		=> $this->filedata['physical_filename'],
+				'attachment_directory'	=> $this->filedata['attachment_directory'],
+				'real_filename'			=> $this->filedata['real_filename'],
+				'extension'				=> $this->filedata['extension'],
+				'mimetype'				=> $this->filedata['mimetype'],
+				'filesize'				=> $this->filedata['filesize'],
+				'filetime'				=> $this->filedata['filetime'],
+				'hash'					=> $this->filedata['md5_checksum'],
+				'attachment_order'		=> $order_id,
+				'attachment_comment'	=> $this->request->variable('filecomment', '', true),
+				'object_type'			=> $this->object_type,
+				'object_id'				=> $this->object_id,
+			);
+			$attachment = $this->operator->get_new_entity($data);
+
+			// Create thumbnail
+			$has_thumbnail = $is_preview = false;
+
+			if ($this->filedata['is_image'])
+			{
+				$has_thumbnail = $attachment->create_thumbnail(
+					$this->max_thumbnail_width,
+					(($this->max_thumbnail_width === false) ? false : 0)
+				);
+
+				// set first screenshot as preview image when it is uploaded
+				$is_preview = !$this->operator->get_count();
+			}
+
+			$attachment->__set_array(array(
+				'thumbnail'				=> $has_thumbnail,
+				'is_preview'			=> $is_preview,
+			));
+			$attachment->submit();
+
+			// Store in operator
+			$this->operator->set($attachment);
+			$this->uploaded = $attachment->get_id();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

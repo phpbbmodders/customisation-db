@@ -55,6 +55,32 @@ class revision extends base
 
     private $attachements_table;
 
+	/** @var \phpbb\event\dispatcher_interface|null */
+	protected $dispatcher;
+
+	/**
+	 * Set the event dispatcher, for the events extensions use on the New Revision page.
+	 *
+	 * @param \phpbb\event\dispatcher_interface $dispatcher
+	 * @return null
+	 */
+	public function set_dispatcher(\phpbb\event\dispatcher_interface $dispatcher)
+	{
+		$this->dispatcher = $dispatcher;
+	}
+
+	/**
+	 * Run an event when a dispatcher is set.
+	 *
+	 * @param string $name
+	 * @param array $vars
+	 * @return array The variables, as changed by the listeners
+	 */
+	protected function trigger_event($name, array $vars)
+	{
+		return ($this->dispatcher) ? $this->dispatcher->trigger_event($name, $vars) : $vars;
+	}
+
 	/**
 	 * Constructor
 	 *
@@ -197,6 +223,19 @@ class revision extends base
 
 		add_form_key('postform');
 
+		$contrib = $this->contrib;
+
+		/**
+		 * Lets an extension add template variables to the New Revision page, for the
+		 * titania_revision_upload_after template event.
+		 *
+		 * @event phpbb.titania.revision_add_display
+		 * @var \titania_contribution contrib The contribution the revision is for
+		 * @var array error Errors shown on the page
+		 */
+		$vars = array('contrib', 'error');
+		extract($this->trigger_event('phpbb.titania.revision_add_display', compact($vars)));
+
 		return $this->helper->render(
 			'contributions/contribution_revision.html',
 			$this->contrib->contrib_name . ' - ' . $this->user->lang['NEW_REVISION']
@@ -315,6 +354,19 @@ class revision extends base
 
 		add_form_key('postform');
 
+		$contrib = $this->contrib;
+
+		/**
+		 * Lets an extension add template variables to the New Revision page, for the
+		 * titania_revision_upload_after template event.
+		 *
+		 * @event phpbb.titania.revision_add_display
+		 * @var \titania_contribution contrib The contribution the revision is for
+		 * @var array error Errors shown on the page
+		 */
+		$vars = array('contrib', 'error');
+		extract($this->trigger_event('phpbb.titania.revision_add_display', compact($vars)));
+
 		return $this->helper->render(
 			'contributions/contribution_revision.html',
 			$this->contrib->contrib_name . ' - ' . $this->user->lang['NEW_REVISION']
@@ -337,6 +389,23 @@ class revision extends base
 
 		// Handle upload
 		$this->uploader->handle_form_action();
+
+		$contrib = $this->contrib;
+		$uploader = $this->uploader;
+		$import_errors = array();
+
+		/**
+		 * Lets an extension attach a revision file it fetched for the author, such as a release from
+		 * a code host, by calling $uploader->add_local_file(). The file then goes through the same
+		 * checks as an upload, and replaces a file uploaded before.
+		 *
+		 * @event phpbb.titania.revision_create_upload
+		 * @var \titania_contribution contrib The contribution the revision is for
+		 * @var \phpbb\titania\attachment\uploader uploader The revision file uploader
+		 * @var array import_errors Errors to show the author
+		 */
+		$vars = array('contrib', 'uploader', 'import_errors');
+		extract($this->trigger_event('phpbb.titania.revision_create_upload', compact($vars)));
 
 		if ($this->uploader->uploaded)
 		{
@@ -389,6 +458,7 @@ class revision extends base
 
 		// Check for errors
 		$error = array_merge(
+			$import_errors,
 			$this->uploader->get_errors(),
 			$this->validate_settings($settings)
 		);

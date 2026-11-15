@@ -49,6 +49,32 @@ class manage extends base
 	/** @var array */
 	protected $status_list;
 
+	/** @var \phpbb\event\dispatcher_interface|null */
+	protected $dispatcher;
+
+	/**
+	 * Set the event dispatcher, for the events extensions use on the contribution's manage page.
+	 *
+	 * @param \phpbb\event\dispatcher_interface $dispatcher
+	 * @return null
+	 */
+	public function set_dispatcher(\phpbb\event\dispatcher_interface $dispatcher)
+	{
+		$this->dispatcher = $dispatcher;
+	}
+
+	/**
+	 * Run an event when a dispatcher is set.
+	 *
+	 * @param string $name
+	 * @param array $vars
+	 * @return array The variables, as changed by the listeners
+	 */
+	protected function trigger_event($name, array $vars)
+	{
+		return ($this->dispatcher) ? $this->dispatcher->trigger_event($name, $vars) : $vars;
+	}
+
 	/**
 	 * Constructor
 	 *
@@ -208,14 +234,49 @@ class manage extends base
 				$this->contrib->contrib_name_clean
 			));
 
+			$contrib = $this->contrib;
+
+			/**
+			 * Lets an extension check the fields it added to the contribution's manage page.
+			 *
+			 * @event phpbb.titania.contribution_manage_validate
+			 * @var \titania_contribution contrib The contribution being changed
+			 * @var array error Errors that stop the changes being saved
+			 */
+			$vars = array('contrib', 'error');
+			extract($this->trigger_event('phpbb.titania.contribution_manage_validate', compact($vars)));
+
 			// Did we succeed or have an error?
 			if (empty($error))
 			{
 				$this->submit($authors, $old_settings);
+
+				/**
+				 * Lets an extension save the fields it added to the contribution's manage page,
+				 * after the contribution's own changes were saved.
+				 *
+				 * @event phpbb.titania.contribution_manage_submit_after
+				 * @var \titania_contribution contrib The contribution that was changed
+				 */
+				$vars = array('contrib');
+				extract($this->trigger_event('phpbb.titania.contribution_manage_submit_after', compact($vars)));
 			}
 		}
 
 		$this->assign_vars($error);
+
+		$contrib = $this->contrib;
+
+		/**
+		 * Lets an extension add template variables to the contribution's manage page, for the
+		 * titania_contribution_manage_options_after template event.
+		 *
+		 * @event phpbb.titania.contribution_manage_display
+		 * @var \titania_contribution contrib The contribution being managed
+		 * @var array error Errors shown on the page
+		 */
+		$vars = array('contrib', 'error');
+		extract($this->trigger_event('phpbb.titania.contribution_manage_display', compact($vars)));
 
 		return $this->helper->render(
 			'contributions/contribution_manage.html',
