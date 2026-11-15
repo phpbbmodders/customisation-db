@@ -68,6 +68,12 @@ class main_listener implements EventSubscriberInterface
 	/** @var bool */
 	protected $in_titania;
 
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
+	/** @var \phpbb\titania\config\config */
+	protected $ext_config;
+
 	/**
 	 * Constructor
 	 *
@@ -81,8 +87,10 @@ class main_listener implements EventSubscriberInterface
 	 * @param string $phpbb_root_path phpBB root path
 	 * @param string $ext_root_path Titania root path
 	 * @param string $php_ext PHP file extension
+	 * @param \phpbb\auth\auth $auth
+	 * @param \phpbb\titania\config\config $ext_config Titania's settings
 	 */
-	public function __construct(request $request, db_driver_interface $db, user $user, template $template, language $language, helper $controller_helper, access $access, type_collection $types, $phpbb_root_path, $ext_root_path, $php_ext)
+	public function __construct(request $request, db_driver_interface $db, user $user, template $template, language $language, helper $controller_helper, access $access, type_collection $types, $phpbb_root_path, $ext_root_path, $php_ext, \phpbb\auth\auth $auth, \phpbb\titania\config\config $ext_config)
 	{
 		$this->request = $request;
 		$this->db = $db;
@@ -96,6 +104,8 @@ class main_listener implements EventSubscriberInterface
 		$this->php_ext = $php_ext;
 		$this->ext_root_path = $ext_root_path;
 		$this->in_titania = false;
+		$this->auth = $auth;
+		$this->ext_config = $ext_config;
 	}
 
 	static public function getSubscribedEvents()
@@ -205,10 +215,21 @@ class main_listener implements EventSubscriberInterface
 
 	public function overwrite_template_vars($event)
 	{
+		// Links to the Customisation Database, and to its management pages for users who can moderate it,
+		// in the header's Quick links on every page: outside phpBB.com nothing else links to it. Each can be
+		// turned off and renamed in Titania's settings.
+		$this->user->add_lang_ext('phpbb/titania', 'common');
+		$show_manage = $this->ext_config->nav_manage_link
+			&& (!empty($this->types->find_authed()) || $this->auth->acl_get('u_titania_mod_contrib_mod') || $this->auth->acl_get('u_titania_mod_post_mod'));
+		$this->template->assign_vars(array(
+			'U_TITANIA_NAV_INDEX'		=> $this->ext_config->nav_cdb_link ? $this->controller_helper->route('phpbb.titania.index') : '',
+			'TITANIA_NAV_INDEX_NAME'	=> (string) $this->ext_config->nav_cdb_link_name ?: $this->language->lang('CUSTOMISATION_DATABASE'),
+			'U_TITANIA_NAV_MANAGE'		=> $show_manage ? $this->controller_helper->route('phpbb.titania.manage') : '',
+			'TITANIA_NAV_MANAGE_NAME'	=> (string) $this->ext_config->nav_manage_link_name ?: $this->language->lang('MANAGE'),
+		));
+
 		if ($this->user->data['is_registered'] && !$this->user->data['is_bot'])
 		{
-			$this->user->add_lang_ext('phpbb/titania', 'common');
-
 			$u_my_contribs = $this->controller_helper->route('phpbb.titania.author', array(
 				'author'	=> urlencode($this->user->data['username_clean']),
 				'page'		=> 'contributions',
